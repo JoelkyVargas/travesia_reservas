@@ -1,0 +1,54 @@
+:root {
+    --bg: #f7f3ee; --surface: #ffffff; --text: #1e1d1a; --muted: #6b695f; --accent: #9f6b3b;
+    --accent-dark: #80552d; --border: #e8dfd4; --success: #e7f8ec; --success-text: #1f6b36;
+    --danger: #a43b32; --radius: 18px; --shadow: 0 10px 30px rgba(0,0,0,.06); --container: 1120px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--text); background: var(--bg); line-height: 1.5; }
+h1, h2, h3, h4, p { margin-top: 0; }
+a { color: inherit; text-decoration: none; }
+.container { width: min(var(--container), calc(100% - 2rem)); margin: 0 auto; }
+.narrow { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+.section { padding: 4rem 0; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .9rem 1.2rem; border-radius: 999px; border: 1px solid transparent; font-weight: 700; cursor: pointer; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-secondary { background: transparent; border-color: var(--border); }
+.btn-block { width: 100%; }
+.eyebrow { display: inline-block; margin-bottom: .75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-size: .8rem; }
+.muted { color: var(--muted); }
+.clean-list { list-style: none; padding: 0; margin: 1rem 0; }
+.clean-list li { padding: .45rem 0; border-bottom: 1px solid var(--border); }
+.link-arrow { color: var(--accent-dark); font-weight: 700; }
+.flash-stack { padding-top: 1rem; }
+.flash { padding: .9rem 1rem; border-radius: 14px; margin-bottom: .75rem; }
+.flash-success { background: var(--success); color: var(--success-text); }
+.placeholder-photo { min-height: 320px; border-radius: var(--radius); background: linear-gradient(135deg, #d9c0a5, #8d6040); color: white; display: grid; place-items: center; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: .08em; }
+
+
+.hero-square-image {
+    width: 100%;
+    min-height: 320px;
+    height: 100%;
+    border-radius: var(--radius);
+    object-fit: cover;
+    display: block;
+    box-shadow: var(--shadow);
+}
+.image-preview-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fcfaf7;
+}
+.image-preview-square {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 18px;
+    display: block;
+    margin-top: .5rem;
+}

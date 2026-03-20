@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Ajustes{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="two-col">
+      <div class="card form-card">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">Solo dueños</span>
+            <h1>Ajustes del restaurante</h1>
+          </div>
+          <a class="btn btn-secondary" href="{% url 'dashboard:business_hour_create' %}">Agregar horario</a>
+        </div>
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {% if form.instance.logo %}
+            <div class="image-preview-card">
+              <span class="eyebrow">Logo actual</span>
+              <img src="{{ form.instance.logo.url }}" alt="{{ form.instance.name }}" class="image-preview-square">
+            </div>
+          {% endif %}
+          {% for field in form %}
+            <div class="form-row">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% for error in field.errors %}<small class="error-text">{{ error }}</small>{% endfor %}
+            </div>
+          {% endfor %}
+          <button class="btn btn-primary btn-block" type="submit">Guardar configuración</button>
+        </form>
+      </div>
+
+      <div class="stack-list">
+        <div class="card">
+          <h2>Horarios configurados</h2>
+          <div class="stack-list">
+            {% for hour in hours %}
+            <div class="stack-item">
+              <strong>{{ hour.get_weekday_display }}</strong>
+              <span>{{ hour.opens_at|time:"H:i" }} - {{ hour.closes_at|time:"H:i" }} {% if not hour.is_open %}(cerrado){% endif %}</span>
+            </div>
+            {% empty %}
+            <p class="muted">No hay horarios registrados.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="panel-head">
+            <h2>Mesas</h2>
+            <span class="muted">Capacidad real del salón</span>
+          </div>
+          <form method="post" action="{% url 'dashboard:table_create' %}" class="table-inline-form">
+            {% csrf_token %}
+            {% for field in table_form %}
+              <div class="form-row">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+              </div>
+            {% endfor %}
+            <button class="btn btn-secondary btn-block" type="submit">Agregar mesa</button>
+          </form>
+
+          <div class="stack-list top-gap">
+            {% for table in tables %}
+            <div class="stack-item stack-item-inline">
+              <div>
+                <strong>{{ table.name }}</strong>
+                <span>{{ table.capacity }} personas {% if not table.is_active %}· inactiva{% endif %}</span>
+              </div>
+              <a class="link-arrow" href="{% url 'dashboard:table_toggle_active' table.pk %}">
+                {% if table.is_active %}Desactivar{% else %}Activar{% endif %}
+              </a>
+            </div>
+            {% empty %}
+            <p class="muted">No hay mesas registradas aún.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

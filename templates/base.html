@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Travesía Reservas{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reservation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+</head>
+<body>
+    {% include "includes/navbar.html" %}
+    <main>
+        {% include "includes/messages.html" %}
+        {% block content %}{% endblock %}
+    </main>
+    {% include "includes/footer.html" %}
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/mobile_nav.js' %}"></script>
+    <script src="{% static 'js/reservation_form.js' %}"></script>
+</body>
+</html>

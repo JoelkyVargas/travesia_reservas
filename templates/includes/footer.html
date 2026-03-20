@@ -1,0 +1,17 @@
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div>
+            <h4>{% if site_restaurant %}{{ site_restaurant.name }}{% else %}Travesía{% endif %}</h4>
+            <p>{% if site_restaurant and site_restaurant.short_description %}{{ site_restaurant.short_description }}{% else %}Reservas y experiencia gastronómica.{% endif %}</p>
+        </div>
+        <div>
+            <h4>Contacto</h4>
+            <p>{{ site_restaurant.phone|default:"Teléfono pendiente" }}</p>
+            <p>{{ site_restaurant.email|default:"Correo pendiente" }}</p>
+        </div>
+        <div>
+            <h4>Ubicación</h4>
+            <p>{{ site_restaurant.address|default:"La Fortuna, Costa Rica" }}</p>
+        </div>
+    </div>
+</footer>

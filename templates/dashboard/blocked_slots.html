@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Bloqueos{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container two-col">
+    <div class="card form-card">
+      <span class="eyebrow">Solo dueños</span>
+      <h1>Bloquear día</h1>
+      <form method="post" action="{% url 'dashboard:blocked_date_create' %}" novalidate>
+        {% csrf_token %}
+        {% for field in date_form %}
+          <div class="form-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<small class="error-text">{{ error }}</small>{% endfor %}
+          </div>
+        {% endfor %}
+        <button class="btn btn-primary btn-block" type="submit">Guardar bloqueo</button>
+      </form>
+    </div>
+    <div class="card form-card">
+      <span class="eyebrow">Solo dueños</span>
+      <h1>Bloquear franja</h1>
+      <form method="post" action="{% url 'dashboard:blocked_slot_create' %}" novalidate>
+        {% csrf_token %}
+        {% for field in slot_form %}
+          <div class="form-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<small class="error-text">{{ error }}</small>{% endfor %}
+          </div>
+        {% endfor %}
+        <button class="btn btn-primary btn-block" type="submit">Guardar franja</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container two-col top-gap-lg">
+    <div class="card">
+      <h2>Fechas bloqueadas</h2>
+      <div class="stack-list">
+        {% for item in blocked_dates %}
+          <div class="stack-item"><strong>{{ item.date }}</strong><span>{{ item.reason|default:"Sin motivo" }}</span></div>
+        {% empty %}
+          <p class="muted">No hay fechas bloqueadas.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="card">
+      <h2>Franjas bloqueadas</h2>
+      <div class="stack-list">
+        {% for item in blocked_slots %}
+          <div class="stack-item"><strong>{{ item.date }} · {{ item.start_time|time:"H:i" }} - {{ item.end_time|time:"H:i" }}</strong><span>{{ item.reason|default:"Sin motivo" }}</span></div>
+        {% empty %}
+          <p class="muted">No hay franjas bloqueadas.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Inicio | {{ restaurant.name|default:"Travesía" }}{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="container hero-grid">
+        <div class="hero-copy">
+            <span class="eyebrow">La Fortuna, Costa Rica</span>
+            <h1>{{ restaurant.hero_title|default:"Reserva tu mesa en Travesía" }}</h1>
+            <p>{{ restaurant.hero_subtitle|default:"Una experiencia gastronómica memorable." }}</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% url 'reservations:create' %}">Reservar ahora</a>
+                <a class="btn btn-secondary" href="{% url 'core:menu' %}">Ver menú</a>
+                {% if restaurant.whatsapp_number %}
+                <a class="btn btn-secondary" href="https://wa.me/{{ restaurant.whatsapp_number|cut:'+' }}" target="_blank" rel="noopener">WhatsApp</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hero-card">
+            {% if restaurant and restaurant.logo %}
+                <img class="hero-square-image" src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }}">
+            {% else %}
+                <div class="placeholder-photo">TRAVESÍA</div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container two-col">
+        <div>
+            <h2>Sobre nosotros</h2>
+            <p>{{ restaurant.long_description|default:"Comparte una experiencia cálida, buena comida y atención cuidada." }}</p>
+        </div>
+        <div class="card">
+            <h3>Información</h3>
+            <p><strong>Tel:</strong> {{ restaurant.phone|default:"Pendiente" }}</p>
+            <p><strong>Email:</strong> {{ restaurant.email|default:"Pendiente" }}</p>
+            <p><strong>Dirección:</strong> {{ restaurant.address|default:"La Fortuna, San Carlos" }}</p>
+            <div class="hero-actions compact-actions">
+                <a class="link-arrow" href="{% url 'core:contact' %}">Ver contacto</a>
+                {% if restaurant.google_maps_url %}
+                <a class="link-arrow" href="{{ restaurant.google_maps_url }}" target="_blank" rel="noopener">Cómo llegar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Ver reservas{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="eyebrow">Centro operativo</span>
+        <h1>Ver reservas</h1>
+      </div>
+      <div class="dashboard-actions">
+        <a class="btn btn-primary" href="{% url 'dashboard:reservation_create_manual' %}">Nueva reserva</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <form class="filter-bar search-bar reservations-filter-block" method="get">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar por nombre o teléfono">
+        <input type="date" name="date" value="{{ request.GET.date }}">
+        <select name="status">
+          <option value="">Todos los estados</option>
+          <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pendiente</option>
+          <option value="confirmed" {% if request.GET.status == 'confirmed' %}selected{% endif %}>Confirmada</option>
+          <option value="cancelled" {% if request.GET.status == 'cancelled' %}selected{% endif %}>Cancelada</option>
+          <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completada</option>
+          <option value="no_show" {% if request.GET.status == 'no_show' %}selected{% endif %}>No-show</option>
+        </select>
+        <select name="scope">
+          <option value="">Todo</option>
+          <option value="today" {% if request.GET.scope == 'today' %}selected{% endif %}>Solo hoy</option>
+        </select>
+        <button class="btn btn-secondary" type="submit">Filtrar</button>
+      </form>
+    </div>
+
+    <div class="card mobile-cards-wrap">
+      <div class="table-wrap desktop-only">
+        <table class="data-table">
+          <thead>
+            <tr><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Mesa</th><th>Pax</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody>
+            {% for reservation in reservations %}
+            <tr>
+              <td>{{ reservation.reservation_date }}</td>
+              <td>{{ reservation.reservation_time|time:"H:i" }}</td>
+              <td>{{ reservation.customer_name }}</td>
+              <td>{% if reservation.assigned_table %}{{ reservation.assigned_table.name }}{% else %}<span class="muted">Sin asignar</span>{% endif %}</td>
+              <td>{{ reservation.party_size }}</td>
+              <td>
+                <form method="post" action="{% url 'dashboard:reservation_inline_status' reservation.pk %}" class="status-inline-form">
+                  {% csrf_token %}
+                  <select name="status" class="status-select status-select-{{ reservation.status }}" onchange="this.form.submit()" aria-label="Cambiar estado de {{ reservation.customer_name }}">
+                    {% for value, label in reservation.STATUS_CHOICES %}
+                      <option value="{{ value }}" {% if reservation.status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </form>
+              </td>
+              <td>
+                <div class="actions-inline">
+                  <a class="link-arrow" href="{% url 'dashboard:reservation_detail' reservation.pk %}">Ver</a>
+                  <a class="link-arrow" href="{% url 'dashboard:reservation_edit' reservation.pk %}">Editar</a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No hay reservas.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mobile-only reservation-mobile-list">
+        {% for reservation in reservations %}
+        <article class="mobile-reservation-card">
+          <div class="mobile-card-top">
+            <strong>{{ reservation.customer_name }}</strong>
+            <span class="status-pill status-{{ reservation.status }}">{{ reservation.get_status_display }}</span>
+          </div>
+          <p class="muted">{{ reservation.reservation_date }} · {{ reservation.reservation_time|time:"H:i" }} · {{ reservation.party_size }} pax</p>
+          <p class="muted">Mesa: {% if reservation.assigned_table %}{{ reservation.assigned_table.name }}{% else %}Sin asignar{% endif %}</p>
+          <form method="post" action="{% url 'dashboard:reservation_inline_status' reservation.pk %}" class="status-inline-form status-inline-form-mobile">
+            {% csrf_token %}
+            <label class="small-label">Estado</label>
+            <select name="status" class="status-select status-select-{{ reservation.status }}" onchange="this.form.submit()">
+              {% for value, label in reservation.STATUS_CHOICES %}
+                <option value="{{ value }}" {% if reservation.status == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </form>
+          <div class="hero-actions compact-actions top-gap">
+            <a class="btn btn-secondary btn-smallish" href="{% url 'dashboard:reservation_detail' reservation.pk %}">Ver</a>
+            <a class="btn btn-secondary btn-smallish" href="{% url 'dashboard:reservation_edit' reservation.pk %}">Editar</a>
+          </div>
+        </article>
+        {% empty %}
+        <p>No hay reservas.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

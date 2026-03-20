@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Disponibilidad{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="eyebrow">Disponibilidad</span>
+        <h1>Ver ocupación</h1>
+      </div>
+    </div>
+
+    <div class="card">
+      <form method="get" class="filter-bar search-bar availability-filters">
+        <select name="mode">
+          <option value="franja" {% if mode == 'franja' %}selected{% endif %}>Por franja</option>
+          <option value="mesa" {% if mode == 'mesa' %}selected{% endif %}>Por mesa</option>
+        </select>
+        <input type="date" name="date" value="{{ target_date|date:'Y-m-d' }}">
+        <button class="btn btn-secondary" type="submit">Aplicar</button>
+      </form>
+    </div>
+
+    <div class="card top-gap">
+      <div class="panel-head">
+        {% if mode == 'mesa' %}
+          <h2>Disponibilidad por mesa</h2>
+        {% else %}
+          <h2>Disponibilidad por franja</h2>
+        {% endif %}
+        <span class="muted">Fecha: {{ target_date }}</span>
+      </div>
+
+      {% if mode == 'mesa' %}
+        <div class="availability-table-wrap">
+          <table class="availability-matrix">
+            <thead>
+              <tr>
+                <th>Mesa</th>
+                {% for header in slot_headers %}
+                  <th>{{ header }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in availability_rows %}
+                <tr>
+                  <td class="availability-table-name">
+                    <strong>{{ row.table.name }}</strong>
+                    <span>{{ row.table.capacity }} pax</span>
+                  </td>
+                  {% for cell in row.slots %}
+                    <td>
+                      <span class="availability-chip availability-chip-{{ cell.state }}">
+                        {% if cell.is_free %}Libre{% else %}Ocupada{% endif %}
+                      </span>
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="100%">No hay mesas activas configuradas.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="occupancy-grid">
+          {% for row in availability_rows %}
+            <div class="occupancy-slot occupancy-{{ row.state }}">
+              <div class="occupancy-slot-top">
+                <strong>{{ row.label }}</strong>
+                <span>{{ row.free_count }}/{{ row.total_tables }} mesas libres</span>
+              </div>
+<div class="availability-lines">
+  {% if row.summary_lines %}
+    {% for line in row.summary_lines %}
+      <small>{{ line }}</small>
+    {% endfor %}
+  {% else %}
+    <small>Sin mesas libres</small>
+  {% endif %}
+</div>
+            </div>
+          {% empty %}
+            <p class="muted">No hay disponibilidad para mostrar con los filtros actuales.</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

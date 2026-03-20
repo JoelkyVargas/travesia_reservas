@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Usuarios staff{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="eyebrow">Solo dueños</span>
+        <h1>Usuarios staff</h1>
+      </div>
+      <a class="btn btn-primary" href="{% url 'dashboard:user_create' %}">Nuevo usuario</a>
+    </div>
+    <div class="card mobile-cards-wrap">
+      <div class="table-wrap desktop-only">
+        <table class="data-table">
+          <thead><tr><th>Usuario</th><th>Nombre</th><th>Email</th><th>Activo</th><th>Acción</th></tr></thead>
+          <tbody>
+            {% for user_obj in users %}
+            <tr>
+              <td>{{ user_obj.username }}</td>
+              <td>{{ user_obj.first_name }} {{ user_obj.last_name }}</td>
+              <td>{{ user_obj.email }}</td>
+              <td>{{ user_obj.is_active|yesno:"Sí,No" }}</td>
+              <td><a class="link-arrow" href="{% url 'dashboard:user_toggle_active' user_obj.pk %}">Activar / desactivar</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No hay usuarios staff.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="mobile-only reservation-mobile-list">
+        {% for user_obj in users %}
+        <article class="mobile-reservation-card">
+          <div class="mobile-card-top">
+            <strong>{{ user_obj.username }}</strong>
+            <span class="status-pill">{{ user_obj.is_active|yesno:"Activo,Inactivo" }}</span>
+          </div>
+          <p class="muted">{{ user_obj.first_name }} {{ user_obj.last_name }} · {{ user_obj.email }}</p>
+          <a class="btn btn-secondary btn-smallish" href="{% url 'dashboard:user_toggle_active' user_obj.pk %}">Activar / desactivar</a>
+        </article>
+        {% empty %}
+        <p>No hay usuarios staff.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

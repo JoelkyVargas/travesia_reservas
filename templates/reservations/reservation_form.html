@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Reservar{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container two-col">
+    <div>
+      <h1>Reserva tu mesa</h1>
+      <p>Completa el formulario y el sistema validará horario, bloqueos y capacidad.</p>
+      <div class="card">
+        <p><strong>Restaurante:</strong> {{ restaurant.name }}</p>
+        <p><strong>Teléfono:</strong> {{ restaurant.phone }}</p>
+        <p><strong>Email:</strong> {{ restaurant.email }}</p>
+      </div>
+    </div>
+    <div class="card form-card">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}
+              <small class="error-text">{{ error }}</small>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+          <div class="form-row">
+            {% for error in form.non_field_errors %}
+              <small class="error-text">{{ error }}</small>
+            {% endfor %}
+          </div>
+        {% endif %}
+        <button class="btn btn-primary btn-block" type="submit">Enviar reserva</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

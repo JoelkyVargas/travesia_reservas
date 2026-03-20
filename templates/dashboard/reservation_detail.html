@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Detalle de reserva{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="eyebrow">Detalle</span>
+        <h1>{{ reservation.customer_name }}</h1>
+      </div>
+      <div class="dashboard-actions">
+        <a class="btn btn-secondary" href="{% url 'dashboard:reservations' %}">Volver</a>
+        <a class="btn btn-primary" href="{% url 'dashboard:reservation_edit' reservation.pk %}">Editar</a>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h2>Información principal</h2>
+        <ul class="details-list">
+          <li><strong>Fecha</strong><span>{{ reservation.reservation_date }}</span></li>
+          <li><strong>Hora</strong><span>{{ reservation.reservation_time|time:"H:i" }}</span></li>
+          <li><strong>Personas</strong><span>{{ reservation.party_size }}</span></li>
+          <li><strong>Teléfono</strong><span>{{ reservation.phone }}</span></li>
+          <li><strong>Email</strong><span>{{ reservation.email }}</span></li>
+          <li><strong>Mesa</strong><span>{% if reservation.assigned_table %}{{ reservation.assigned_table.name }} · {{ reservation.assigned_table.capacity }} pax{% else %}Sin asignar{% endif %}</span></li>
+          <li><strong>Estado</strong><span class="status-pill status-{{ reservation.status }}">{{ reservation.get_status_display }}</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Acciones rápidas</h2>
+        <div class="hero-actions compact-actions">
+          <a class="btn btn-secondary" href="{% url 'dashboard:reservation_quick_status' reservation.pk 'confirm' %}">Confirmar</a>
+          <a class="btn btn-secondary" href="{% url 'dashboard:reservation_quick_status' reservation.pk 'complete' %}">Completada</a>
+          <a class="btn btn-secondary" href="{% url 'dashboard:reservation_quick_status' reservation.pk 'noshow' %}">No-show</a>
+          <a class="btn btn-secondary" href="{% url 'dashboard:reservation_quick_status' reservation.pk 'cancel' %}">Cancelar</a>
+        </div>
+        <div class="top-gap">
+          <a class="link-arrow" href="{% url 'dashboard:reservation_notes' reservation.pk %}">Editar notas y estado</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card top-gap-lg">
+      <h2>Notas del cliente</h2>
+      <p>{{ reservation.notes|default:"Sin notas del cliente." }}</p>
+      <h3 class="top-gap">Notas internas</h3>
+      <p>{{ reservation.internal_notes|default:"Sin notas internas." }}</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

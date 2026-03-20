@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <span class="eyebrow">Panel interno</span>
+        <h1>Dashboard</h1>
+      </div>
+    </div>
+
+    <div class="dashboard-pill-grid">
+      <a class="dash-pill dash-pill-strong" href="{% url 'dashboard:reservation_create_manual' %}"><span class="dash-pill-label">Nueva reserva manual</span></a>
+      <a class="dash-pill dash-pill-strong" href="{% url 'dashboard:reservations' %}"><span class="dash-pill-label">Ver reservas</span></a>
+      <a class="dash-pill dash-pill-strong" href="{% url 'dashboard:availability' %}"><span class="dash-pill-label">Ver ocupación</span></a>
+      {% if user.is_superuser %}
+        <a class="dash-pill dash-pill-strong" href="{% url 'dashboard:blocked_slots' %}"><span class="dash-pill-label">Bloqueos</span></a>
+        <a class="dash-pill dash-pill-strong" href="{% url 'dashboard:users' %}"><span class="dash-pill-label">Usuarios</span></a>
+      {% endif %}
+    </div>
+
+    <div class="stats-grid stats-grid-4">
+      <div class="stat-card"><span>Reservas de hoy</span><strong>{{ today_count }}</strong></div>
+      <div class="stat-card"><span>Pendientes</span><strong>{{ pending_count }}</strong></div>
+      <div class="stat-card"><span>Completadas hoy</span><strong>{{ completed_today }}</strong></div>
+      <div class="stat-card"><span>No-show hoy</span><strong>{{ no_show_today }}</strong></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

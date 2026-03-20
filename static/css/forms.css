@@ -1,0 +1,5 @@
+.form-row { margin-bottom: 1rem; }
+.form-row label { display: block; margin-bottom: .35rem; font-weight: 700; }
+input, textarea, select { width: 100%; padding: .9rem 1rem; border-radius: 14px; border: 1px solid var(--border); background: #fff; font: inherit; }
+textarea { resize: vertical; }
+.error-text { display: block; color: var(--danger); margin-top: .35rem; font-size: .9rem; }

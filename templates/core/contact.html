@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Contacto{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container two-col">
+    <div>
+      <span class="eyebrow">Contacto</span>
+      <h1>Estamos para ayudarte</h1>
+      <p class="muted">¿Tienes una consulta, un grupo grande o una solicitud especial? Puedes comunicarte directamente con Travesía.</p>
+    </div>
+    <div class="card">
+      <ul class="clean-list">
+        <li><strong>Teléfono:</strong> {{ site_restaurant.phone|default:"Pendiente" }}</li>
+        <li><strong>Correo:</strong> {{ site_restaurant.email|default:"Pendiente" }}</li>
+        <li><strong>Dirección:</strong> {{ site_restaurant.address|default:"La Fortuna, Costa Rica" }}</li>
+      </ul>
+      <div class="hero-actions compact-actions">
+        {% if site_restaurant.whatsapp_number %}
+        <a class="btn btn-primary" href="https://wa.me/{{ site_restaurant.whatsapp_number|cut:'+' }}" target="_blank" rel="noopener">WhatsApp</a>
+        {% endif %}
+        {% if site_restaurant.google_maps_url %}
+        <a class="btn btn-secondary" href="{{ site_restaurant.google_maps_url }}" target="_blank" rel="noopener">Google Maps</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

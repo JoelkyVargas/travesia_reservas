@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.forms import modelform_factory
 from django.shortcuts import get_object_or_404, redirect, render
-from datetime import date
+from datetime import date, timedelta
 from django.utils import timezone
 from django.views.generic import TemplateView, ListView, DetailView
 
@@ -36,8 +36,16 @@ class ReservationListView(LoginRequiredMixin, ListView):
         q = self.request.GET.get('q')
         date = self.request.GET.get('date')
         scope = self.request.GET.get('scope')
-        if scope == 'today':
-            qs = qs.filter(reservation_date=timezone.localdate())
+        today = timezone.localdate()
+        if scope == 'past':
+            qs = qs.filter(reservation_date__lt=today)
+        elif scope == 'today':
+            qs = qs.filter(reservation_date=today)
+        elif scope == 'tomorrow':
+            qs = qs.filter(reservation_date=today + timedelta(days=1))
+        elif scope == 'week':
+            end_of_week = today + timedelta(days=(6 - today.weekday()))
+            qs = qs.filter(reservation_date__gte=today, reservation_date__lte=end_of_week)
         if status:
             qs = qs.filter(status=status)
         if date:

@@ -12,35 +12,7 @@
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th, .data-table td { border-bottom: 1px solid var(--border); padding: .9rem .75rem; text-align: left; }
 
-.nav-logout-form {
-  display: inline;
-  margin: 0;
-}
-
-.nav-link-button {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-
-
-
-.language-switcher {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 12px;
-}
-
-.language-switcher select {
-  border: 1px solid #d9c9b8;
-  background: #fff;
-  border-radius: 999px;
-  padding: 6px 12px;
-  font: inherit;
-  color: #5b4330;
-  cursor: pointer;
-}
+.nav-logout-form { display: inline; margin: 0; }
+.nav-link-button { background: none; border: none; padding: 0; margin: 0; font: inherit; color: inherit; cursor: pointer; font-weight: 600; }
+.language-switcher { display: inline-flex; align-items: center; margin-left: .25rem; }
+.language-switcher select { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: .38rem .75rem; font: inherit; color: var(--muted); cursor: pointer; }

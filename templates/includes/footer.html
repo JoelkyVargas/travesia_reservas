@@ -1,16 +1,18 @@
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
 <footer class="site-footer">
     <div class="container footer-grid">
         <div>
             <h4>{% if site_restaurant %}{{ site_restaurant.name }}{% else %}Travesía{% endif %}</h4>
-            <p>{% if site_restaurant and site_restaurant.short_description %}{{ site_restaurant.short_description }}{% else %}Reservas y experiencia gastronómica.{% endif %}</p>
+            <p>{% if site_restaurant and site_restaurant.short_description %}{{ site_restaurant.short_description }}{% else %}{% if CURRENT_LANGUAGE == 'en' %}Reservations and dining experience.{% else %}Reservas y experiencia gastronómica.{% endif %}{% endif %}</p>
         </div>
         <div>
-            <h4>Contacto</h4>
+            <h4>{% if CURRENT_LANGUAGE == 'en' %}Contact{% else %}Contacto{% endif %}</h4>
             <p>{{ site_restaurant.phone|default:"Teléfono pendiente" }}</p>
             <p>{{ site_restaurant.email|default:"Correo pendiente" }}</p>
         </div>
         <div>
-            <h4>Ubicación</h4>
+            <h4>{% if CURRENT_LANGUAGE == 'en' %}Location{% else %}Ubicación{% endif %}</h4>
             <p>{{ site_restaurant.address|default:"La Fortuna, Costa Rica" }}</p>
         </div>
     </div>

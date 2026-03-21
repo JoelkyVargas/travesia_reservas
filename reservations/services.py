@@ -12,10 +12,10 @@ def get_active_restaurant():
         raise ValidationError("No hay restaurante activo configurado.")
     return restaurant
 
-def _time_overlaps(existing_time, new_time, slot_minutes):
+def _time_overlaps(existing_time, new_time, occupied_minutes):
     existing_dt = datetime.combine(datetime.today(), existing_time)
     new_dt = datetime.combine(datetime.today(), new_time)
-    return abs((existing_dt - new_dt).total_seconds()) < (slot_minutes * 60)
+    return abs((existing_dt - new_dt).total_seconds()) < (occupied_minutes * 60)
 
 def validate_business_hours(restaurant, reservation_date, reservation_time):
     weekday = reservation_date.weekday()
@@ -56,7 +56,7 @@ def get_table_assignments_for_slot(restaurant, reservation_date, reservation_tim
 
     occupied_table_ids = set()
     for reservation in qs:
-        if _time_overlaps(reservation.reservation_time, reservation_time, restaurant.slot_minutes):
+        if _time_overlaps(reservation.reservation_time, reservation_time, restaurant.reservation_duration_minutes):
             occupied_table_ids.add(reservation.assigned_table_id)
     return occupied_table_ids
 
@@ -148,5 +148,5 @@ def get_day_slots(restaurant, target_date):
         end_dt = datetime.combine(target_date, window.closes_at)
         while cursor < end_dt:
             slots.append(cursor.time())
-            cursor += timedelta(minutes=restaurant.slot_minutes)
+            cursor += timedelta(minutes=restaurant.reservation_duration_minutes)
     return slots

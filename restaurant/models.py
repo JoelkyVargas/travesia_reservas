@@ -15,6 +15,7 @@ class RestaurantProfile(models.Model):
     hero_subtitle = models.CharField(max_length=220, blank=True)
     logo = models.ImageField(upload_to="restaurant_assets/", blank=True, null=True)
     slot_minutes = models.PositiveIntegerField(default=60, validators=[MinValueValidator(15), MaxValueValidator(240)])
+    reservation_duration_minutes = models.PositiveIntegerField(default=120, validators=[MinValueValidator(15), MaxValueValidator(480)])
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

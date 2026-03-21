@@ -1,18 +1,20 @@
 {% extends "base.html" %}
-{% block title %}Contacto{% endblock %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+{% block title %}{% if CURRENT_LANGUAGE == 'en' %}Contact{% else %}Contacto{% endif %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container two-col">
     <div>
-      <span class="eyebrow">Contacto</span>
-      <h1>Estamos para ayudarte</h1>
-      <p class="muted">¿Tienes una consulta, un grupo grande o una solicitud especial? Puedes comunicarte directamente con Travesía.</p>
+      <span class="eyebrow">{% if CURRENT_LANGUAGE == 'en' %}Contact{% else %}Contacto{% endif %}</span>
+      <h1>{% if CURRENT_LANGUAGE == 'en' %}We are here to help{% else %}Estamos para ayudarte{% endif %}</h1>
+      <p class="muted">{% if CURRENT_LANGUAGE == 'en' %}Do you have a question, a large group or a special request? You can contact Travesía directly.{% else %}¿Tienes una consulta, un grupo grande o una solicitud especial? Puedes comunicarte directamente con Travesía.{% endif %}</p>
     </div>
     <div class="card">
       <ul class="clean-list">
-        <li><strong>Teléfono:</strong> {{ site_restaurant.phone|default:"Pendiente" }}</li>
-        <li><strong>Correo:</strong> {{ site_restaurant.email|default:"Pendiente" }}</li>
-        <li><strong>Dirección:</strong> {{ site_restaurant.address|default:"La Fortuna, Costa Rica" }}</li>
+        <li><strong>{% if CURRENT_LANGUAGE == 'en' %}Phone{% else %}Teléfono{% endif %}:</strong> {{ site_restaurant.phone|default:"Pending" }}</li>
+        <li><strong>{% if CURRENT_LANGUAGE == 'en' %}Email{% else %}Correo{% endif %}:</strong> {{ site_restaurant.email|default:"Pending" }}</li>
+        <li><strong>{% if CURRENT_LANGUAGE == 'en' %}Address{% else %}Dirección{% endif %}:</strong> {{ site_restaurant.address|default:"La Fortuna, Costa Rica" }}</li>
       </ul>
       <div class="hero-actions compact-actions">
         {% if site_restaurant.whatsapp_number %}

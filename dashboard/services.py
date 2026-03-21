@@ -19,7 +19,6 @@ def _occupancy_state(free_count, total_count):
         return "medium"
     return "low"
 
-
 def build_availability_by_slot(target_date=None):
     restaurant = get_active_restaurant()
     target_date = target_date or timezone.localdate()
@@ -27,17 +26,11 @@ def build_availability_by_slot(target_date=None):
     active_tables = list(restaurant.tables.filter(is_active=True).order_by("capacity", "name"))
     total_tables = len(active_tables)
     rows = []
-
     for slot in slots:
         available_tables = list(get_available_tables(restaurant, target_date, slot))
         free_count = len(available_tables)
         capacity_counter = Counter(table.capacity for table in available_tables)
-
-        summary_lines = [
-            f"{count} mesa(s) de {cap} pax"
-            for cap, count in sorted(capacity_counter.items())
-        ]
-
+        summary_lines = [f"{count} mesa(s) de {cap} pax" for cap, count in sorted(capacity_counter.items())]
         rows.append({
             "label": slot.strftime("%H:%M"),
             "free_count": free_count,
@@ -46,7 +39,6 @@ def build_availability_by_slot(target_date=None):
             "state": _occupancy_state(free_count, total_tables),
             "summary_lines": summary_lines,
         })
-
     return rows
 
 def build_availability_by_table(target_date=None, table_id=None):

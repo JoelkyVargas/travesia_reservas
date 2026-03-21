@@ -1,16 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Menú{% endblock %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+{% block title %}{% if CURRENT_LANGUAGE == 'en' %}Menu{% else %}Menú{% endif %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container narrow">
     <div class="card">
-      <span class="eyebrow">Menú</span>
-      <h1>Explora la propuesta de Travesía</h1>
+      <span class="eyebrow">{% if CURRENT_LANGUAGE == 'en' %}Menu{% else %}Menú{% endif %}</span>
+      <h1>{% if CURRENT_LANGUAGE == 'en' %}Explore Travesía's proposal{% else %}Explora la propuesta de Travesía{% endif %}</h1>
       {% if site_restaurant and site_restaurant.menu_pdf %}
-        <p>Puedes abrir el menú completo en PDF.</p>
-        <a class="btn btn-primary" href="{{ site_restaurant.menu_pdf.url }}" target="_blank" rel="noopener">Abrir menú</a>
+        <p>{% if CURRENT_LANGUAGE == 'en' %}You can open the full menu in PDF.{% else %}Puedes abrir el menú completo en PDF.{% endif %}</p>
+        <a class="btn btn-primary" href="{{ site_restaurant.menu_pdf.url }}" target="_blank" rel="noopener">{% if CURRENT_LANGUAGE == 'en' %}Open menu{% else %}Abrir menú{% endif %}</a>
       {% else %}
-        <p class="muted">Aún no se ha cargado un menú en PDF. Puedes actualizarlo desde el admin del restaurante.</p>
+        <p class="muted">{% if CURRENT_LANGUAGE == 'en' %}A PDF menu has not been uploaded yet. You can update it from the restaurant admin.{% else %}Aún no se ha cargado un menú en PDF. Puedes actualizarlo desde el admin del restaurante.{% endif %}</p>
       {% endif %}
     </div>
   </div>

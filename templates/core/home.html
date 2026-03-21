@@ -1,15 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Inicio | {{ restaurant.name|default:"Travesía" }}{% endblock %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+{% block title %}{% if CURRENT_LANGUAGE == 'en' %}Home{% else %}Inicio{% endif %} | {{ restaurant.name|default:"Travesía" }}{% endblock %}
 {% block content %}
 <section class="hero">
     <div class="container hero-grid">
         <div class="hero-copy">
             <span class="eyebrow">La Fortuna, Costa Rica</span>
-            <h1>{{ restaurant.hero_title|default:"Reserva tu mesa en Travesía" }}</h1>
-            <p>{{ restaurant.hero_subtitle|default:"Una experiencia gastronómica memorable." }}</p>
+            <h1>{% if CURRENT_LANGUAGE == 'en' %}{{ restaurant.hero_title|default:"Book your table at Travesía" }}{% else %}{{ restaurant.hero_title|default:"Reserva tu mesa en Travesía" }}{% endif %}</h1>
+            <p>{% if CURRENT_LANGUAGE == 'en' %}{% if restaurant.hero_subtitle %}{{ restaurant.hero_subtitle }}{% else %}A memorable dining experience.{% endif %}{% else %}{{ restaurant.hero_subtitle|default:"Una experiencia gastronómica memorable." }}{% endif %}</p>
             <div class="hero-actions">
-                <a class="btn btn-primary" href="{% url 'reservations:create' %}">Reservar ahora</a>
-                <a class="btn btn-secondary" href="{% url 'core:menu' %}">Ver menú</a>
+                <a class="btn btn-primary" href="{% url 'reservations:create' %}">{% if CURRENT_LANGUAGE == 'en' %}Book now{% else %}Reservar ahora{% endif %}</a>
+                <a class="btn btn-secondary" href="{% url 'core:menu' %}">{% if CURRENT_LANGUAGE == 'en' %}View menu{% else %}Ver menú{% endif %}</a>
                 {% if restaurant.whatsapp_number %}
                 <a class="btn btn-secondary" href="https://wa.me/{{ restaurant.whatsapp_number|cut:'+' }}" target="_blank" rel="noopener">WhatsApp</a>
                 {% endif %}
@@ -27,20 +29,15 @@
 <section class="section">
     <div class="container two-col">
         <div>
-            <h2>Sobre nosotros</h2>
-            <p>{{ restaurant.long_description|default:"Comparte una experiencia cálida, buena comida y atención cuidada." }}</p>
+            <h2>{% if CURRENT_LANGUAGE == 'en' %}About us{% else %}Sobre nosotros{% endif %}</h2>
+            <p>{% if restaurant.long_description %}{{ restaurant.long_description }}{% else %}{% if CURRENT_LANGUAGE == 'en' %}Share a warm, polished and memorable dining experience at Travesía.{% else %}Comparte una experiencia cálida, cuidada y memorable en Travesía.{% endif %}{% endif %}</p>
         </div>
         <div class="card">
-            <h3>Información</h3>
-            <p><strong>Tel:</strong> {{ restaurant.phone|default:"Pendiente" }}</p>
-            <p><strong>Email:</strong> {{ restaurant.email|default:"Pendiente" }}</p>
-            <p><strong>Dirección:</strong> {{ restaurant.address|default:"La Fortuna, San Carlos" }}</p>
-            <div class="hero-actions compact-actions">
-                <a class="link-arrow" href="{% url 'core:contact' %}">Ver contacto</a>
-                {% if restaurant.google_maps_url %}
-                <a class="link-arrow" href="{{ restaurant.google_maps_url }}" target="_blank" rel="noopener">Cómo llegar</a>
-                {% endif %}
-            </div>
+            <ul class="clean-list">
+                <li><strong>{% if CURRENT_LANGUAGE == 'en' %}Phone{% else %}Teléfono{% endif %}:</strong> {{ restaurant.phone|default:"-" }}</li>
+                <li><strong>{% if CURRENT_LANGUAGE == 'en' %}Email{% else %}Correo{% endif %}:</strong> {{ restaurant.email|default:"-" }}</li>
+                <li><strong>{% if CURRENT_LANGUAGE == 'en' %}Address{% else %}Dirección{% endif %}:</strong> {{ restaurant.address|default:"La Fortuna, Costa Rica" }}</li>
+            </ul>
         </div>
     </div>
 </section>

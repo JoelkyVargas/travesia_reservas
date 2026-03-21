@@ -20,6 +20,7 @@ class Command(BaseCommand):
                 "hero_title": "Reserva tu mesa en Travesía",
                 "hero_subtitle": "Una experiencia gastronómica para disfrutar en La Fortuna.",
                 "slot_minutes": 60,
+                "reservation_duration_minutes": 120,
                 "is_active": True,
             }
         )

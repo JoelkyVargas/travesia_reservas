@@ -73,15 +73,15 @@
                 <strong>{{ row.label }}</strong>
                 <span>{{ row.free_count }}/{{ row.total_tables }} mesas libres</span>
               </div>
-<div class="availability-lines">
-  {% if row.summary_lines %}
-    {% for line in row.summary_lines %}
-      <small>{{ line }}</small>
-    {% endfor %}
-  {% else %}
-    <small>Sin mesas libres</small>
-  {% endif %}
-</div>
+              <div class="availability-lines">
+              {% if row.summary_lines %}
+                {% for line in row.summary_lines %}
+                  <small>{{ line }}</small>
+                {% endfor %}
+              {% else %}
+                <small>Sin mesas libres</small>
+              {% endif %}
+            </div>
             </div>
           {% empty %}
             <p class="muted">No hay disponibilidad para mostrar con los filtros actuales.</p>

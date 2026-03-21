@@ -255,22 +255,12 @@ a.dash-pill-strong:hover,
   margin-top: 0.35rem;
 }
 
-
-
-
-
-
-.card + .card {
-  margin-top: 20px;
-}
-
 .availability-lines {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 6px;
 }
-
 .availability-lines small {
   display: block;
   line-height: 1.25;

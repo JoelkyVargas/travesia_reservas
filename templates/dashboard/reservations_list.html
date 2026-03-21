@@ -27,7 +27,10 @@
         </select>
         <select name="scope">
           <option value="">Todo</option>
-          <option value="today" {% if request.GET.scope == 'today' %}selected{% endif %}>Solo hoy</option>
+          <option value="past" {% if request.GET.scope == 'past' %}selected{% endif %}>Pasadas</option>
+          <option value="today" {% if request.GET.scope == 'today' %}selected{% endif %}>Hoy</option>
+          <option value="tomorrow" {% if request.GET.scope == 'tomorrow' %}selected{% endif %}>Mañana</option>
+          <option value="week" {% if request.GET.scope == 'week' %}selected{% endif %}>Esta semana</option>
         </select>
         <button class="btn btn-secondary" type="submit">Filtrar</button>
       </form>

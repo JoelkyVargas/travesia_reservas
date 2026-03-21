@@ -1,21 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Reserva enviada{% endblock %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+{% block title %}{% if CURRENT_LANGUAGE == 'en' %}Reservation sent{% else %}Reserva enviada{% endif %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container narrow">
     <div class="card success-card">
-      <h1>¡Reserva enviada!</h1>
-      <p>Tu solicitud fue registrada correctamente.</p>
-      {% if reservation %}
-      <ul class="clean-list">
-        <li><strong>Nombre:</strong> {{ reservation.customer_name }}</li>
-        <li><strong>Fecha:</strong> {{ reservation.reservation_date }}</li>
-        <li><strong>Hora:</strong> {{ reservation.reservation_time }}</li>
-        <li><strong>Personas:</strong> {{ reservation.party_size }}</li>
-        <li><strong>Estado:</strong> {{ reservation.get_status_display }}</li>
-      </ul>
-      {% endif %}
-      <a class="btn btn-primary" href="{% url 'core:home' %}">Volver al inicio</a>
+      <h1>{% if CURRENT_LANGUAGE == 'en' %}Reservation sent!{% else %}¡Reserva enviada!{% endif %}</h1>
+      <p>{% if CURRENT_LANGUAGE == 'en' %}Your request was registered successfully.{% else %}Tu solicitud fue registrada correctamente.{% endif %}</p>
+      <a class="btn btn-primary" href="{% url 'core:home' %}">{% if CURRENT_LANGUAGE == 'en' %}Back to home{% else %}Volver al inicio{% endif %}</a>
     </div>
   </div>
 </section>

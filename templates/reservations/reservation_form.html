@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Reservar{% endblock %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+{% block title %}{% if CURRENT_LANGUAGE == 'en' %}Reserve{% else %}Reservar{% endif %}{% endblock %}
 {% block content %}
 <section class="section">
   <div class="container two-col">
     <div>
-      <h1>Reserva tu mesa</h1>
-      <p>Completa el formulario y el sistema validará horario, bloqueos y capacidad.</p>
+      <h1>{% if CURRENT_LANGUAGE == 'en' %}Book your table{% else %}Reserva tu mesa{% endif %}</h1>
+      <p>{% if CURRENT_LANGUAGE == 'en' %}Complete the form and the system will validate hours, blocks and table availability.{% else %}Completa el formulario y el sistema validará horario, bloqueos y disponibilidad de mesas.{% endif %}</p>
       <div class="card">
-        <p><strong>Restaurante:</strong> {{ restaurant.name }}</p>
-        <p><strong>Teléfono:</strong> {{ restaurant.phone }}</p>
+        <p><strong>{% if CURRENT_LANGUAGE == 'en' %}Restaurant{% else %}Restaurante{% endif %}:</strong> {{ restaurant.name }}</p>
+        <p><strong>{% if CURRENT_LANGUAGE == 'en' %}Phone{% else %}Teléfono{% endif %}:</strong> {{ restaurant.phone }}</p>
         <p><strong>Email:</strong> {{ restaurant.email }}</p>
       </div>
     </div>
@@ -19,6 +21,7 @@
           <div class="form-row">
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
+            {% if field.help_text %}<small class="helptext">{{ field.help_text }}</small>{% endif %}
             {% for error in field.errors %}
               <small class="error-text">{{ error }}</small>
             {% endfor %}
@@ -31,7 +34,7 @@
             {% endfor %}
           </div>
         {% endif %}
-        <button class="btn btn-primary btn-block" type="submit">Enviar reserva</button>
+        <button class="btn btn-primary btn-block" type="submit">{% if CURRENT_LANGUAGE == 'en' %}Send reservation{% else %}Enviar reserva{% endif %}</button>
       </form>
     </div>
   </div>

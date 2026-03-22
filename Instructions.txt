@@ -49,6 +49,9 @@ python manage.py createsuperuser
 python manage.py seed_data
 python manage.py runserver
 
+"whitenoise.middleware.WhiteNoiseMiddleware",
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 - Verificar que migraciones no borran todo
 - Pasar rango de tiempo de visualizaciones a la visualizacion

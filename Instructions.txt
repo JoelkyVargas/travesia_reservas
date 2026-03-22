@@ -64,3 +64,42 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 - Se pueden hacer reservas despues de las 7pm, 8pm???
 
 
+
+
+
+Veo lo siguiente en shell de render:
+">>> from django.conf import settings
+>>> print(settings.DATABASES["default"])
+{'ENGINE': 'django.db.backends.sqlite3', 'NAME': PosixPath('/opt/render/project/src/db.sqlite3'), 'ATOMIC_REQUESTS': False, 'AUTOCOMMIT': True, 'CONN_MAX_AGE': 0, 'CONN_HEALTH_CHECKS': False, 'OPTIONS': {}, 'TIME_ZONE': None, 'USER': '', 'PASSWORD': '', 'HOST': '', 'PORT': '', 'TEST': {'CHARSET': None, 'COLLATION': None, 'MIGRATE': True, 'MIRROR': None, 'NAME': None}}
+>>> "
+
+Lo siguiente es settings.py:
+"DATABASES = {
+    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
+}"
+
+Lo siguiente en render.yaml:
+"services:
+  - type: web
+    name: travesia-reservas
+    runtime: python
+    plan: starter
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn travesia_reservas.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "travesia-reservas.onrender.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: travesia-db
+          property: connectionString
+
+databases:
+  - name: travesia-db
+    plan: basic-256mb"
+
+...Dime si esto sirve para diagnosticar o si necesitas mas detalles como el seed, etc.

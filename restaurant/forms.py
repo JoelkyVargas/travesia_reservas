@@ -6,8 +6,13 @@ class RestaurantProfileForm(forms.ModelForm):
         model = RestaurantProfile
         fields = [
             "name","short_description","long_description","phone","email","address",
-            "google_maps_url","whatsapp_number","primary_color","hero_title",
-            "hero_subtitle","logo","reservation_duration_minutes","is_active"
+            "google_maps_url","whatsapp_number",
+            #"primary_color",
+            "hero_title",
+            "hero_subtitle",
+            #"logo",
+            "reservation_duration_minutes"#,
+            #"is_active"
         ]
         widgets = {"long_description": forms.Textarea(attrs={"rows": 4})}
 

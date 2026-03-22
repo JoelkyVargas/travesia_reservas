@@ -35,7 +35,7 @@ class ReservationListView(LoginRequiredMixin, ListView):
         status = self.request.GET.get('status')
         q = self.request.GET.get('q')
         date = self.request.GET.get('date')
-        scope = self.request.GET.get('scope')
+        scope = self.request.GET.get("scope") or "today"
         today = timezone.localdate()
         if scope == 'past':
             qs = qs.filter(reservation_date__lt=today)

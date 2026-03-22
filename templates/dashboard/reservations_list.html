@@ -25,13 +25,14 @@
           <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completada</option>
           <option value="no_show" {% if request.GET.status == 'no_show' %}selected{% endif %}>No-show</option>
         </select>
-        <select name="scope">
-          <option value="">Todo</option>
-          <option value="past" {% if request.GET.scope == 'past' %}selected{% endif %}>Pasadas</option>
-          <option value="today" {% if request.GET.scope == 'today' %}selected{% endif %}>Hoy</option>
-          <option value="tomorrow" {% if request.GET.scope == 'tomorrow' %}selected{% endif %}>Mañana</option>
-          <option value="week" {% if request.GET.scope == 'week' %}selected{% endif %}>Esta semana</option>
-        </select>
+
+<select name="scope">
+  <option value="past" {% if request.GET.scope == 'past' %}selected{% endif %}>Pasadas</option>
+  <option value="today" {% if request.GET.scope == 'today' or not request.GET.scope %}selected{% endif %}>Hoy</option>
+  <option value="tomorrow" {% if request.GET.scope == 'tomorrow' %}selected{% endif %}>Mañana</option>
+  <option value="week" {% if request.GET.scope == 'week' %}selected{% endif %}>Esta semana</option>
+</select>
+
         <button class="btn btn-secondary" type="submit">Filtrar</button>
       </form>
     </div>

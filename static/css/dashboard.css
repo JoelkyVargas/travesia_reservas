@@ -265,3 +265,8 @@ a.dash-pill-strong:hover,
   display: block;
   line-height: 1.25;
 }
+
+
+.mobile-cards-wrap {
+  margin-top: 24px;
+}

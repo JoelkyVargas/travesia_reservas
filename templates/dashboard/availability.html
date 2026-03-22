@@ -13,8 +13,15 @@
     <div class="card">
       <form method="get" class="filter-bar search-bar availability-filters">
         <select name="mode">
-          <option value="franja" {% if mode == 'franja' %}selected{% endif %}>Por franja</option>
           <option value="mesa" {% if mode == 'mesa' %}selected{% endif %}>Por mesa</option>
+          <option value="franja" {% if mode == 'franja' %}selected{% endif %}>Por franja</option>
+        </select>
+        <select name="interval">
+          {% for option in interval_options %}
+            <option value="{{ option }}" {% if selected_interval == option %}selected{% endif %}>
+              {% if option == 15 %}15 min{% elif option == 30 %}30 min{% elif option == 60 %}1 hora{% elif option == 120 %}2 horas{% else %}{{ option }} min{% endif %}
+            </option>
+          {% endfor %}
         </select>
         <input type="date" name="date" value="{{ target_date|date:'Y-m-d' }}">
         <button class="btn btn-secondary" type="submit">Aplicar</button>

@@ -150,21 +150,34 @@ def availability_view(request):
             target_date = date.fromisoformat(str(target_date))
     except Exception:
         target_date = timezone.localdate()
-    mode = request.GET.get("mode", "franja")
-    if mode == "mesa":
-        data = build_availability_by_table(target_date=target_date)
-        context = {
-            "mode": mode,
-            "target_date": target_date,
-            "availability_rows": data["rows"],
-            "tables": data["tables"],
-            "slot_headers": data["slot_headers"],
-        }
-    else:
+
+    mode = request.GET.get("mode", "mesa")
+    try:
+        interval = int(request.GET.get("interval", 30))
+    except (TypeError, ValueError):
+        interval = 30
+    allowed_intervals = [15, 30, 60, 120]
+    if interval not in allowed_intervals:
+        interval = 30
+
+    if mode == "franja":
         context = {
             "mode": "franja",
             "target_date": target_date,
-            "availability_rows": build_availability_by_slot(target_date=target_date),
+            "selected_interval": interval,
+            "interval_options": allowed_intervals,
+            "availability_rows": build_availability_by_slot(target_date=target_date, interval_minutes=interval),
+        }
+    else:
+        data = build_availability_by_table(target_date=target_date, interval_minutes=interval)
+        context = {
+            "mode": "mesa",
+            "target_date": target_date,
+            "selected_interval": interval,
+            "interval_options": allowed_intervals,
+            "availability_rows": data["rows"],
+            "tables": data["tables"],
+            "slot_headers": data["slot_headers"],
         }
     return render(request, "dashboard/availability.html", context)
 

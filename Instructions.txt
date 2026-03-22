@@ -32,6 +32,11 @@ python manage.py seed_data
 python manage.py runserver
 
 
+git status
+git add -A
+git commit --allow-empty -m "Changes"
+git push origin main
+
 
 & "C:\Users\jvz16\anaconda3\python.exe" -m venv .venv
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -44,5 +49,15 @@ python manage.py createsuperuser
 python manage.py seed_data
 python manage.py runserver
 
+
+- Verificar que migraciones no borran todo
+- Pasar rango de tiempo de visualizaciones a la visualizacion
+- Que vista "por mesa" en "Ver ocupacion" sea la vista por defecto, en lugar de "por franja"
+- Simplificar vista en Ajusted del Admin, y poder editar/agregar mesas y horarios, # tel y mejorar idioma.
+
+- Filtro por defecto en "VER RESERVAS" es "HOY".
+- No poder reservar con menos de 2hrs de anticipacion?
+- Agregar boton rapido de "habilitar mesa" en "ver" dentro de "ver reservas" cuya function sea precisamente habilitar una mesa ocupada para que pueda ser reservada de inmediato si asi se quisiera posteriormente.
+- Se pueden hacer reservas despues de las 7pm, 8pm???
 
 

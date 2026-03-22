@@ -12,10 +12,16 @@ def get_active_restaurant():
         raise ValidationError("No hay restaurante activo configurado.")
     return restaurant
 
-def _time_overlaps(existing_time, new_time, occupied_minutes):
-    existing_dt = datetime.combine(datetime.today(), existing_time)
-    new_dt = datetime.combine(datetime.today(), new_time)
-    return abs((existing_dt - new_dt).total_seconds()) < (occupied_minutes * 60)
+def _build_interval(base_date, start_time, duration_minutes):
+    start_dt = datetime.combine(base_date, start_time)
+    end_dt = start_dt + timedelta(minutes=duration_minutes)
+    return start_dt, end_dt
+
+def _intervals_overlap(start_a, end_a, start_b, end_b):
+    return start_a < end_b and start_b < end_a
+
+def _moment_inside_interval(moment_dt, start_dt, end_dt):
+    return start_dt <= moment_dt < end_dt
 
 def validate_business_hours(restaurant, reservation_date, reservation_time):
     weekday = reservation_date.weekday()
@@ -44,7 +50,7 @@ def validate_blocked_time(restaurant, reservation_date, reservation_time):
     if blocked:
         raise ValidationError("La hora seleccionada está bloqueada.")
 
-def get_table_assignments_for_slot(restaurant, reservation_date, reservation_time, exclude_id=None):
+def get_table_assignments_for_booking(restaurant, reservation_date, reservation_time, exclude_id=None):
     qs = Reservation.objects.filter(
         restaurant=restaurant,
         reservation_date=reservation_date,
@@ -54,18 +60,88 @@ def get_table_assignments_for_slot(restaurant, reservation_date, reservation_tim
     if exclude_id:
         qs = qs.exclude(id=exclude_id)
 
+    new_start, new_end = _build_interval(
+        reservation_date,
+        reservation_time,
+        restaurant.reservation_duration_minutes,
+    )
+
     occupied_table_ids = set()
     for reservation in qs:
-        if _time_overlaps(reservation.reservation_time, reservation_time, restaurant.reservation_duration_minutes):
+        existing_start, existing_end = _build_interval(
+            reservation.reservation_date,
+            reservation.reservation_time,
+            restaurant.reservation_duration_minutes,
+        )
+        if _intervals_overlap(existing_start, existing_end, new_start, new_end):
             occupied_table_ids.add(reservation.assigned_table_id)
     return occupied_table_ids
 
+def get_table_assignments_for_display(
+    restaurant,
+    reservation_date,
+    display_time,
+    interval_minutes=30,
+    exclude_id=None,
+):
+    qs = Reservation.objects.filter(
+        restaurant=restaurant,
+        reservation_date=reservation_date,
+        status__in=ACTIVE_STATUS,
+        assigned_table__isnull=False,
+    ).select_related("assigned_table")
+
+    if exclude_id:
+        qs = qs.exclude(id=exclude_id)
+
+    display_start = datetime.combine(reservation_date, display_time)
+    display_end = display_start + timedelta(minutes=interval_minutes)
+
+    occupied_table_ids = set()
+
+    for reservation in qs:
+        reservation_start, reservation_end = _build_interval(
+            reservation.reservation_date,
+            reservation.reservation_time,
+            restaurant.reservation_duration_minutes,
+        )
+
+        # Traslape real entre la franja visual y la reserva real
+        if display_start < reservation_end and display_end > reservation_start:
+            occupied_table_ids.add(reservation.assigned_table_id)
+
+    return occupied_table_ids
+
 def get_available_tables(restaurant, reservation_date, reservation_time, party_size=None, exclude_id=None):
-    occupied_table_ids = get_table_assignments_for_slot(restaurant, reservation_date, reservation_time, exclude_id=exclude_id)
+    occupied_table_ids = get_table_assignments_for_booking(
+        restaurant,
+        reservation_date,
+        reservation_time,
+        exclude_id=exclude_id,
+    )
     qs = restaurant.tables.filter(is_active=True).exclude(id__in=occupied_table_ids).order_by("capacity", "name")
     if party_size:
         qs = qs.filter(capacity__gte=party_size)
     return qs
+
+def get_available_tables_for_display(
+    restaurant,
+    reservation_date,
+    display_time,
+    interval_minutes=30,
+):
+    occupied_table_ids = get_table_assignments_for_display(
+        restaurant,
+        reservation_date,
+        display_time,
+        interval_minutes=interval_minutes,
+    )
+    return (
+        restaurant.tables
+        .filter(is_active=True)
+        .exclude(id__in=occupied_table_ids)
+        .order_by("capacity", "name")
+    )
 
 def find_best_table(restaurant, reservation_date, reservation_time, party_size, exclude_id=None):
     table = get_available_tables(
@@ -139,7 +215,7 @@ def assign_table_for_reservation(reservation):
     )
     return reservation
 
-def get_day_slots(restaurant, target_date):
+def get_day_slots(restaurant, target_date, interval_minutes=15):
     weekday = target_date.weekday()
     hours = restaurant.business_hours.filter(weekday=weekday, is_open=True).order_by("opens_at")
     slots = []
@@ -148,5 +224,5 @@ def get_day_slots(restaurant, target_date):
         end_dt = datetime.combine(target_date, window.closes_at)
         while cursor < end_dt:
             slots.append(cursor.time())
-            cursor += timedelta(minutes=restaurant.reservation_duration_minutes)
+            cursor += timedelta(minutes=interval_minutes)
     return slots

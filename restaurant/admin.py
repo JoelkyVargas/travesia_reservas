@@ -11,7 +11,7 @@ class RestaurantTableInline(admin.TabularInline):
 
 @admin.register(RestaurantProfile)
 class RestaurantProfileAdmin(admin.ModelAdmin):
-    list_display = ("name","phone","email","slot_minutes","is_active")
+    list_display = ("name","phone","email","reservation_duration_minutes","is_active")
     inlines = [BusinessHourInline, RestaurantTableInline]
 
 admin.site.register(BlockedDate)
